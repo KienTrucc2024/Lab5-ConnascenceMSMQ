@@ -2,8 +2,9 @@ package org.example;
 
 import jakarta.jms.*;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.example.model.Student;
 
-import java.util.logging.Level;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class SampleReceiver {
@@ -11,6 +12,12 @@ public class SampleReceiver {
     public static void main(String[] args) throws Exception{
         System.out.println("Waitingg...");
         ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory();
+        //        Trust
+        ArrayList<String> lst = new ArrayList<>();
+        lst.add("org.example.model");
+
+        factory.setTrustedPackages(lst);
+
         Connection connection = factory.createConnection("admin", "admin");
 
         // Should be happened
@@ -28,6 +35,9 @@ public class SampleReceiver {
                     String msg = ((TextMessage) message).getText();
                     System.out.println(msg);
                 }else if(message instanceof  ObjectMessage){
+                    System.out.println("dsdsfds");
+                    Student st = message.getBody(Student.class);
+                    System.out.println(st);
 
                 } else {
                     System.out.println("NOT KNOW MESSAGE!!!");
